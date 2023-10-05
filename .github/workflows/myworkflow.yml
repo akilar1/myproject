@@ -1,0 +1,15 @@
+name: My Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'A message to include in the workflow run'
+        required: true
+
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print message
+        run: echo ${{ github.event.inputs.message }}
