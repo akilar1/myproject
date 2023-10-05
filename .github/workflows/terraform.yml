@@ -1,15 +1,25 @@
-name: My Workflow
+name: Sync main with dev
 
 on:
-  workflow_dispatch:
-    inputs:
-      message:
-        description: 'A message to include in the workflow run'
-        required: true
+  push:
+    branches:
+      - master
 
 jobs:
-  my-job:
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Print message
-        run: echo ${{ github.event.inputs.message }}
+      - name: Checkout dev branch
+        uses: actions/checkout@v2
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Merge master branch
+        run: git merge --no-edit origin/master
+
+      - name: Push changes to dev branch
+        uses: ad-m/github-push-action@master
+        with:
+          branch: dev
+          github_token: ${{ secrets.GITHUB_TOKEN }}
